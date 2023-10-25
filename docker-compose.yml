@@ -1,0 +1,10 @@
+version: '3.9'
+services:
+  suanet_mod1_est_inf_inc:
+    build: .
+    ports:
+      - "8501:8501"
+#     volumes:
+#       - mod1_data:/modulo_est_inferencial
+# volumes:
+#   mod1_data:
