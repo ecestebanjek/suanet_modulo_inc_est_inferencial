@@ -2,6 +2,7 @@ version: '3.9'
 services:
   suanet_mod1_est_inf_inc:
     build: .
+    image: jcastrosdm1/img_mod1
     ports:
       - "8501:8501"
 #     volumes:

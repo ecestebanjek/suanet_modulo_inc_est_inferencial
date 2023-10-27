@@ -2,7 +2,7 @@
 
 FROM python:3.10.6-slim
 
-WORKDIR /modulo_est_inferencial
+WORKDIR /mod1_est_inferencial 
 
 RUN apt-get update && apt-get install -y \
     build-essential \
