@@ -1,6 +1,6 @@
 version: '3.9'
 services:
-  suanet_mod1_est_inf_inc:
+  cont_suanet_mod1:
     build: .
     image: jcastrosdm1/img_mod1
     ports:
