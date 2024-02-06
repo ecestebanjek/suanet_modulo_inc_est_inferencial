@@ -203,19 +203,23 @@ if selected == "Centroides":
 if selected == "Inferencia dias":
     st.title(f"Modelo inferencial - Recomendaciones por dia")
     data = consult_data(inicial_date, final_date, dias)
-    if not data.empty:
-        res = bn_model(data)
-        res['clasif'] = ''
-        res[['parametros','clasif']] = res.apply(filter_params,axis=1, result_type="expand")
-        res1 = res[res['clasif']=='Dia de la semana']
-        res2 = res[res['clasif']=='Periodo del dia']
-        fig1 = px.bar(res1, x='parametros', y='betas', width=400, height=400)
-        fig2 = px.bar(res2, x='parametros', y='betas', width=400, height=400)
-        cola, col1, col2, colb = st.columns([1,2,2,1])
-        col1.markdown('### Análisis por días (Respecto al domingo)')
-        col1.plotly_chart(fig1, use_container_width=True)
-        col2.markdown('### Análisis por parte del día (Respecto a la mañana)')
-        col2.plotly_chart(fig2, use_container_width=True)
+    delta = final_date - inicial_date
+    if delta > timedelta(days=7):
+        if not data.empty:
+            res = bn_model(data)
+            res['clasif'] = ''
+            res[['parametros','clasif']] = res.apply(filter_params,axis=1, result_type="expand")
+            res1 = res[res['clasif']=='Dia de la semana']
+            res2 = res[res['clasif']=='Periodo del dia']
+            fig1 = px.bar(res1, x='parametros', y='betas', width=400, height=400)
+            fig2 = px.bar(res2, x='parametros', y='betas', width=400, height=400)
+            cola, col1, col2, colb = st.columns([1,2,2,1])
+            col1.markdown('### Análisis por días (Respecto al domingo)')
+            col1.plotly_chart(fig1, use_container_width=True)
+            col2.markdown('### Análisis por parte del día (Respecto a la mañana)')
+            col2.plotly_chart(fig2, use_container_width=True)
+    else:
+        st.error('Para éste cálculo se requiere más de una semana de información')
 
 # if selected == "Inferencia meses":
 #     st.title(f"Modelo inferencial - Recomendaciones por meses")
@@ -231,32 +235,40 @@ if selected == "Inferencia dias":
 #         col1.markdown('### Análisis por días')
 #         col1.plotly_chart(fig1, use_container_width=True)
 if selected == "Inferencia áreas":
-    st.title(f"Modelo inferencial - Recomendaciones por áreas de la policia")
-    data = consult_data(inicial_date, final_date, dias)
-    if not data.empty:
-        res = bn_model(data)
-        res['clasif'] = ''
-        res[['parametros','clasif']] = res.apply(filter_params,axis=1, result_type="expand")
-        res = res[res['clasif']=='Area policia']
-        fig1 = px.bar(res, x='parametros', y='betas', width=400, height=400)
-        cola, col1, colb = st.columns([1,2,1])
-        col1.markdown('### Análisis por áreas de la policia (Respecto al AREA 1)')
-        col1.plotly_chart(fig1, use_container_width=True)
+    delta = final_date - inicial_date
+    if delta > timedelta(days=7):
+        st.title(f"Modelo inferencial - Recomendaciones por áreas de la policia")
+        data = consult_data(inicial_date, final_date, dias)
+        if not data.empty:
+            res = bn_model(data)
+            res['clasif'] = ''
+            res[['parametros','clasif']] = res.apply(filter_params,axis=1, result_type="expand")
+            res = res[res['clasif']=='Area policia']
+            fig1 = px.bar(res, x='parametros', y='betas', width=400, height=400)
+            cola, col1, colb = st.columns([1,2,1])
+            col1.markdown('### Análisis por áreas de la policia (Respecto al AREA 1)')
+            col1.plotly_chart(fig1, use_container_width=True)
+    else:
+        st.error('Para éste cálculo se requiere más de una semana de información')
 if selected == "Otras inferencias":
     st.title(f"Modelo inferencial - Otras inferencias")
     data = consult_data(inicial_date, final_date, dias)
-    if not data.empty:
-        res = bn_model(data)
-        res['clasif'] = ''
-        res[['parametros','clasif']] = res.apply(filter_params,axis=1, result_type="expand")
-        res = res[res['clasif']=='Combinaciones']
-        res.sort_values('betas', inplace=True)
-        
-        cola, col1, colb = st.columns([1,2,1])
-        fig = go.Figure(data=go.Heatmap(z=res['betas'], x=res['betas'], y=res['parametros']))
-        fig.update_layout( autosize=False, width=800, height=800, )
-        col1.markdown("## Otras inferencias cruzadas singnificativas")
-        col1.plotly_chart(fig)
+    delta = final_date - inicial_date
+    if delta > timedelta(days=7):
+        if not data.empty:
+            res = bn_model(data)
+            res['clasif'] = ''
+            res[['parametros','clasif']] = res.apply(filter_params,axis=1, result_type="expand")
+            res = res[res['clasif']=='Combinaciones']
+            res.sort_values('betas', inplace=True)
+            
+            cola, col1, colb = st.columns([1,2,1])
+            fig = go.Figure(data=go.Heatmap(z=res['betas'], x=res['betas'], y=res['parametros']))
+            fig.update_layout( autosize=False, width=800, height=800, )
+            col1.markdown("## Otras inferencias cruzadas singnificativas")
+            col1.plotly_chart(fig)
+    else:
+        st.error('Para éste cálculo se requiere más de una semana de información')
 if selected == "Clustering":
     st.title(f"Modelo de Clustering")
     data = consult_data(inicial_date, final_date, dias)
