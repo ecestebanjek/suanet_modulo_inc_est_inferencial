@@ -150,8 +150,8 @@ st.markdown(
     """
     )
 col1, col2 = st.columns([1,1])
-inicial_date = col1.date_input("Seleccione la fecha desde la cual quiere tomar información de incidentes: ", date(2022, 12, 1))
-final_date = col2.date_input("Seleccione la fecha hasta la cual quiere tomar información de incidentes: ", date(2022, 12, 31))#'today')
+inicial_date = col1.date_input("Seleccione la fecha desde la cual quiere tomar información de incidentes: ", date.today()- timedelta(days=8)) #date(2022, 12, 1)
+final_date = col2.date_input("Seleccione la fecha hasta la cual quiere tomar información de incidentes: ", date.today()- timedelta(days=1))#'today')
 #dias = col1.multiselect("Selecciona los dias de la semana especificos entre las fechas para los análisis ",['Lunes','Martes','Miercoles','Jueves','Viernes','Sabado','Domingo','Todos los dias'], default='Todos los dias', help='Este campo filtra los dias entre las fehcas de inicio y fin seleccionadas arriba. Se pueden seleccionar una o varias',placeholder='Seleccione una o varias opciones')
 dias = 0
 def streamlit_menu():

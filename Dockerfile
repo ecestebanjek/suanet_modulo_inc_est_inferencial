@@ -1,6 +1,7 @@
 # app/Dockerfile
 
-FROM python:3.10.6-slim
+# FROM python:3.10.6-slim
+FROM python:3.10.6
 
 WORKDIR /mod1_est_inferencial 
 
