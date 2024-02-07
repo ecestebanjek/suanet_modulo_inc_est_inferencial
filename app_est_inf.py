@@ -43,11 +43,16 @@ def consult_data(fecha_inicial0, fecha_final0, dias):
     dialect = 'oracle'
     sql_driver = 'oracledb'
     ## ORACLE SDM ## hacer esto con variables de entorno
-    un = 'BITACORA'
-    host = "172.30.6.21"
-    port = "1521"
-    sn = "BITACORA"
-    pw = 'B1tac0r2023*'
+    # un = 'BITACORA'
+    # host = "172.30.6.21"
+    # port = "1521"
+    # sn = "BITACORA"
+    # pw = 'B1tac0r2023*'
+    un = os.environ["UNSN"]
+    host = os.environ["HOST"]
+    port = os.environ["PORT"]
+    sn = os.environ["UNSN"]
+    pw = os.environ["P"]
     # try:
     if (fecha_final0-fecha_inicial0).days <31:
         to_engine: str = dialect + '+' + sql_driver + '://' + un + ':' + pw + '@' + host + ':' + str(port) + '/?service_name=' + sn
@@ -276,6 +281,9 @@ if selected == "Clustering":
         X = np.array(data[['longitude', 'latitude']], dtype='float64')
         model = DBSCAN(eps=0.001, min_samples=25).fit(X)
         class_predictions = model.labels_
+        if len(np.unique(class_predictions)) < 2:
+            model = DBSCAN(eps=0.01, min_samples=10).fit(X)
+            class_predictions = model.labels_
         data['CLUSTERS_DBSCAN'] = class_predictions
         data1 = data[data['CLUSTERS_DBSCAN']>1]
         fig = px.scatter_mapbox(data1, width=1000, height=1000,
